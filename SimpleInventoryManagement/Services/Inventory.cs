@@ -9,9 +9,11 @@ namespace SimpleInventoryManagement.Services
 {
     public class Inventory : IInventory
     {
+        private readonly List<Product> products = [];
+
         public void AddProduct(Product product)
         {
-            throw new NotImplementedException();
+            if (product != null) products.Add(product);
         }
 
         public void DeleteProduct(string name)
