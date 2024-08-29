@@ -33,7 +33,8 @@ namespace SimpleInventoryManagement.Services
 
         public List<Product> GetAllProducts()
         {
-            throw new NotImplementedException();
+            // return a copy of list
+            return new List<Product>(products);
         }
     }
 }

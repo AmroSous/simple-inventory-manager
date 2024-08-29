@@ -23,7 +23,26 @@ namespace SimpleInventoryManagement.UI
             _inventory.AddProduct(product);
         }
 
-        private static string GetNonEmptyString (string msg)
+        public void ViewAllProducts()
+        {
+            Console.WriteLine();
+            var list = _inventory.GetAllProducts();
+            if (list.Count == 0)
+            {
+                Console.WriteLine("There is no products.");
+            }
+            else 
+            {
+                int count = 1;
+                foreach (var product in list)
+                {
+                    Console.WriteLine($"{count++}: {product}");
+                }
+            }
+            Console.WriteLine();
+        }
+
+        private static string GetNonEmptyString(string msg)
         {
             string? input = null; 
             while (string.IsNullOrWhiteSpace(input))
