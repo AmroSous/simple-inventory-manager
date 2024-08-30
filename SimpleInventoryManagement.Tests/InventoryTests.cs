@@ -81,6 +81,18 @@ namespace SimpleInventoryManagement.Tests
             Assert.True(Check_Immutability(updated, inventory));
         }
 
+        [Fact]
+        public void Delete_Product_Test()
+        {
+            Inventory inventory = new();
+            var p1 = new Product() { Name = "product1", Price = 49.5 };
+            inventory.AddProduct(p1);
+
+            inventory.DeleteProduct(p1.Name);
+            Product? p11 = inventory.FindProduct(p1.Name);
+            Assert.Null(p11);
+        }
+
         /**
          * this function will used in unit tests.
          * it takes a product object and IInventory instance
