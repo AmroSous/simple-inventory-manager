@@ -15,12 +15,22 @@ namespace SimpleInventoryManagement.Models
         public int Quantity { get; private set; }
 
         public void AddQuantity(int quantity)
-            => Quantity += quantity; 
+            => Quantity += quantity;
 
         public void RemoveQuantity(int quantity)
             => Quantity -= quantity;
 
         public override string ToString()
             => $"Product {{ Name: {Name}, Price: {Price}, Quantity: {Quantity} }}";
+
+        /**
+         * return a copy for this object
+         */
+        public Product Clone()
+        {
+            var copy = new Product(){ Name = Name, Price = Price };
+            copy.AddQuantity(Quantity);
+            return copy;
+        }
     }
 }
