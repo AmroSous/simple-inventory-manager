@@ -14,6 +14,7 @@ namespace SimpleInventoryManagement.Models
 
         public int Quantity { get; private set; }
 
+
         public void AddQuantity(int quantity)
             => Quantity += quantity;
 

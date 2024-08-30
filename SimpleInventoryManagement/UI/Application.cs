@@ -22,7 +22,7 @@ namespace SimpleInventoryManagement.UI
          * it is injected using constructer and cannot be change.
          */
         private readonly IInventory _inventory = inventory;
-
+        
         
         public void AddProduct()
         {
@@ -53,6 +53,56 @@ namespace SimpleInventoryManagement.UI
                 }
             }
             Console.WriteLine();
+        }
+
+
+        public void EditProduct()
+        {
+            string name = GetNonEmptyString("Enter product name to update:");
+            var product = _inventory.FindProduct(name);
+            if (product == null)
+            {
+                Console.WriteLine("Product not found.");
+                return;
+            }
+
+            string? newName = GetNullableInput($"Enter new name: ({name}) ");
+            double? newPrice = GetNullableNonNegativeDouble($"Enter new price: ({product.Price}) ");
+
+            Product updated = new() { Name = newName ?? name, Price = newPrice ?? product.Price };
+            _inventory.EditProduct(name, updated);
+
+            Console.WriteLine("Updated successfully.");
+        }
+
+        /**
+         * utility method that
+         * prompt the user to enter a string or null.
+         */
+        private static string? GetNullableInput(string msg)
+        {
+            Console.Write($"{msg} ");
+            string? input = Console.ReadLine();
+            return (string.IsNullOrWhiteSpace(input) ? null : input);
+        }
+
+        /**
+         * utility method to
+         * prompt the user to enter positive double 
+         * or null
+         */
+        private static double? GetNullableNonNegativeDouble(string msg)
+        {
+            Console.Write($"{msg} ");
+            string? input = Console.ReadLine();
+            double value = 0.0;
+            while (!string.IsNullOrWhiteSpace(input) && (!double.TryParse(input, out value) || value < 0)) 
+            {
+                Console.Write($"{msg} ");
+                input = Console.ReadLine();
+            }
+            if (string.IsNullOrWhiteSpace(input)) return null; 
+            return value;
         }
 
         /**

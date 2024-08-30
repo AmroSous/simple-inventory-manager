@@ -39,14 +39,32 @@ namespace SimpleInventoryManagement.Services
             throw new NotImplementedException();
         }
 
+        /**
+         * 
+         * Find the product with specified name in list. 
+         * if it exist then replace it with a copy of passed product.
+         */
         public void EditProduct(string name, Product updated)
         {
-            throw new NotImplementedException();
+            int index = -1; 
+            for (int i = 0; i <  _products.Count; i++)
+            {
+                if (_products[i].Name.Equals(name))
+                {
+                    index = i;
+                    break; 
+                }
+            }
+            if (index != -1) _products[index] = updated.Clone();
         }
 
-        public Product FindProduct(string name)
+        public Product? FindProduct(string name)
         {
-            throw new NotImplementedException();
+            foreach (var p in  _products)
+            {
+                if (p.Name.Equals(name)) return p.Clone();
+            }
+            return null;
         }
 
         /**

@@ -42,7 +42,7 @@ namespace SimpleInventoryManagement.Tests
         }
 
         [Fact]
-        public void CheckImmutabilityForReturnedProductsList()
+        public void Check_Immutability_For_Returned_Products_List()
         {
             Inventory inventory = new();
             var p1 = new Product() { Name = "product1", Price = 49.5 };
@@ -61,6 +61,38 @@ namespace SimpleInventoryManagement.Tests
             Assert.Equal("product2", prod2.Name);
             Assert.Equal(5.99, prod2.Price);
             Assert.Equal(0, prod1.Quantity);
+        }
+
+        [Fact]
+        public void Edit_Product_Test()
+        {
+            Inventory inventory = new();
+            var p1 = new Product() { Name = "product1", Price = 49.5 };
+            inventory.AddProduct(p1);
+
+            Product updated = new() { Name = "product2", Price = 59.0 };
+            inventory.EditProduct(p1.Name, updated);
+            var notExistProduct = inventory.FindProduct("product1");
+            var existProduct = inventory.FindProduct("product2");
+            Assert.Null(notExistProduct);
+            Assert.NotNull(existProduct);
+            Assert.Equal("product2", existProduct.Name);
+            Assert.Equal(59.0, existProduct.Price);
+            Assert.True(Check_Immutability(updated, inventory));
+        }
+
+        /**
+         * this function will used in unit tests.
+         * it takes a product object and IInventory instance
+         * and test if changes on this object
+         * will not affect the database. 
+         */
+        private static bool Check_Immutability(Product product, IInventory inventory)
+        {
+            product.AddQuantity(4);
+            var data = inventory.FindProduct(product.Name);
+            if (data == null) return false;
+            return data.Quantity == 0;
         }
     }
 }

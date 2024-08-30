@@ -36,8 +36,9 @@ namespace SimpleInventoryManagement.Services
          * find a product in database using its name 
          * and return a copy of this product to prevent
          * illegal update on database.
+         * if the product does not exist return null
          */
-        Product FindProduct(string name);
+        Product? FindProduct(string name);
 
         /**
          * return all products in database as a List
