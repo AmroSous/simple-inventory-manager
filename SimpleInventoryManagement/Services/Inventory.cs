@@ -36,7 +36,16 @@ namespace SimpleInventoryManagement.Services
 
         public void DeleteProduct(string name)
         {
-            throw new NotImplementedException();
+            int index = -1;
+            for (int i = 0; i < _products.Count; i++)
+            {
+                if (_products[i].Name == name)
+                {
+                    index = i;
+                    break; 
+                }
+            }
+            if (index != -1) _products.RemoveAt(index);
         }
 
         /**

@@ -66,13 +66,38 @@ namespace SimpleInventoryManagement.UI
                 return;
             }
 
-            string? newName = GetNullableInput($"Enter new name: ({name}) ");
-            double? newPrice = GetNullableNonNegativeDouble($"Enter new price: ({product.Price}) ");
+            string? newName = GetNullableInput($"Enter new name: ({name})");
+            double? newPrice = GetNullableNonNegativeDouble($"Enter new price: ({product.Price})");
 
             Product updated = new() { Name = newName ?? name, Price = newPrice ?? product.Price };
             _inventory.EditProduct(name, updated);
 
             Console.WriteLine("Updated successfully.");
+        }
+
+        public void DeleteProduct()
+        {
+            string name = GetNonEmptyString("Enter product name:");
+            if (_inventory.FindProduct(name) == null)
+            {
+                Console.WriteLine("Product not found.");
+            }
+            else
+            {
+                Console.Write("Are you sure you want to delete this product ? (y/n) ");
+                string input = Console.ReadLine() ?? "y";
+                if (string.IsNullOrWhiteSpace(input))  input = "y";
+                input = input.ToLower();
+                if (input.Equals("y"))
+                {
+                    _inventory.DeleteProduct(name);
+                    Console.WriteLine("Deleted successfully.");
+                }
+                else
+                {
+                    Console.WriteLine("Operation aborted.");
+                }
+            }
         }
 
         /**
