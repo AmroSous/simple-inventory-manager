@@ -1,9 +1,4 @@
 ﻿using SimpleInventoryManagement.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SimpleInventoryManagement.Services
 {
@@ -31,9 +26,15 @@ namespace SimpleInventoryManagement.Services
          */
         public void AddProduct(Product product)
         {
-            if (product != null) _products.Add(product.Clone());
+            if (product != null) 
+                _products.Add((Product)product.Clone());
         }
 
+        /**
+         * 
+         * take product name and delete it from the list. 
+         * if the product does not exist do nothing.
+         */
         public void DeleteProduct(string name)
         {
             int index = -1;
@@ -64,14 +65,21 @@ namespace SimpleInventoryManagement.Services
                     break; 
                 }
             }
-            if (index != -1) _products[index] = updated.Clone();
+            if (index != -1) 
+                _products[index] = (Product)updated.Clone();
         }
 
+        /**
+         * 
+         * search for a product in the products list 
+         * by name, and return copy of this product.
+         * if product does not exist return null
+         */
         public Product? FindProduct(string name)
         {
             foreach (var p in  _products)
             {
-                if (p.Name.Equals(name)) return p.Clone();
+                if (p.Name.Equals(name)) return p.Clone() as Product;
             }
             return null;
         }
@@ -84,7 +92,7 @@ namespace SimpleInventoryManagement.Services
         public List<Product> GetAllProducts()
         {
             List<Product> copy = [];
-            foreach (Product product in _products) { copy.Add(product.Clone()); }
+            foreach (Product product in _products) { copy.Add((Product)product.Clone()); }
             return copy;
         }
     }
