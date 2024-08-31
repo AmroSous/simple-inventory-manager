@@ -100,6 +100,20 @@ namespace SimpleInventoryManagement.UI
             }
         }
 
+        public void FindProduct()
+        {
+            string name = GetNonEmptyString("Enter name of product:");
+            var product = _inventory.FindProduct(name);
+            if (product == null)
+            {
+                Console.WriteLine("Product not found.");
+            }
+            else
+            {
+                Console.WriteLine(product);
+            }
+        }
+
         /**
          * utility method that
          * prompt the user to enter a string or null.
