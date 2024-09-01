@@ -1,5 +1,6 @@
 ﻿using SimpleInventoryManagement.Services;
 using SimpleInventoryManagement.UI;
+using SimpleInventoryManagement.Util;
 
 namespace SimpleInventoryManagement
 {
@@ -20,32 +21,50 @@ namespace SimpleInventoryManagement
             ShowWelcomeMessage();
 
             // taking inputs from user and perform operation required.
-            int op;
+            int op = 0;
             do
             {
-                op = ShowMenu();
-                switch (op)
+                try
                 {
-                    case 1: 
-                        app.AddProduct(); break;
-                    case 2:
-                        app.EditProduct(); break;
-                    case 3:
-                        app.DeleteProduct(); break;
-                    case 4:
-                        app.FindProduct(); break;
-                    case 5:
-                        app.ViewAllProducts(); break;
-                    case 6:
-                        break;
-                    default:
-                        Console.WriteLine("Invalid operation."); break;
+                    op = ShowMenu();
+                    switch (op)
+                    {
+                        case 1: 
+                            app.AddProduct(); break;
+                        case 2:
+                            app.EditProduct(); break;
+                        case 3:
+                            app.DeleteProduct(); break;
+                        case 4:
+                            app.FindProduct(); break;
+                        case 5:
+                            app.ViewAllProducts(); break;
+                        case 6:
+                            break;
+                        default:
+                            Console.WriteLine("Invalid operation."); break;
+                    }
+                }
+                catch (OperationAbortedException)
+                {
+                    IO.Log("Operation aborted.\n", LogType.Info);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    IO.Log($"{ex.Message}\n", LogType.Fail);
+                }
+                catch (Exception ex)
+                {
+                    IO.Log($"{ex.Message}\n", LogType.Error);
                 }
 
             } while (op != 6);
 
-            Console.WriteLine();
-            Console.WriteLine("Good bye .. ");
+            IO.Log("""
+
+                        Good bye ..
+
+                """, LogType.Info);
             Console.ReadLine();
         }
 
@@ -56,8 +75,7 @@ namespace SimpleInventoryManagement
          */
         static void ShowWelcomeMessage()
         {
-            Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine("""
+            IO.Log("""
                                
                             ░██╗░░░░░░░██╗███████╗██╗░░░░░░█████╗░░█████╗░███╗░░░███╗███████╗
                             ░██║░░██╗░░██║██╔════╝██║░░░░░██╔══██╗██╔══██╗████╗░████║██╔════╝
@@ -66,22 +84,19 @@ namespace SimpleInventoryManagement
                             ░░╚██╔╝░╚██╔╝░███████╗███████╗╚█████╔╝╚█████╔╝██║░╚═╝░██║███████╗
                             ░░░╚═╝░░░╚═╝░░╚══════╝╚══════╝░╚════╝░░╚════╝░╚═╝░░░░░╚═╝╚══════╝
 
-                """);
-            Console.ResetColor();
-            Console.WriteLine();
 
-            Console.ForegroundColor= ConsoleColor.Green;
-            Console.WriteLine("""
-                Welcome to our first version of Simple Inventory Management System. 
-                this application used to track number of products in inventory using 
-                friendly console interface. 
 
-                """);
-            Console.ResetColor();
+                """, LogType.Info);
 
-            Console.ForegroundColor= ConsoleColor.White;
-            Console.Write("Enter any key to start the application.. ");
-            Console.ResetColor();
+            IO.Log("""
+                            Welcome to our first version of Simple Inventory Management System. 
+                            this application used to track number of products in inventory using 
+                            friendly console interface. 
+
+
+                """, LogType.Success);
+
+            IO.Log("Enter any key to start the application.. ", LogType.Normal);
             Console.ReadLine();
         }
 
@@ -92,8 +107,7 @@ namespace SimpleInventoryManagement
          */
         private static int ShowMenu()
         {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("""
+            IO.Log("""
                 ────────────────────────────────────────────────────────
 
                         ╔═══════════ ≪ Menu ≫ ══════════╗
@@ -107,10 +121,10 @@ namespace SimpleInventoryManagement
                         ║                               ║
                         ╚═══════════ ^^^^^^^ ═══════════╝
 
-                """);
 
-            Console.Write("Enter the number of requested operation: ");
-            Console.ResetColor();
+                """, LogType.Warning);
+
+            IO.Log("Enter the number of requested operation: ", LogType.Normal);
             string? input = Console.ReadLine();
             return int.TryParse(input, out int choice) 
                 && choice >= 1 && choice <= 6 ? choice : -1;

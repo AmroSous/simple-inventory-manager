@@ -23,50 +23,43 @@ namespace SimpleInventoryManagement.Services
          * take a product param and store a copy of it 
          * in _products list. 
          * if passed products was null nothing happen.
+         * if product already exist it throws
+         * InvalidOperationException("Product already exist.");
          */
         public void AddProduct(Product product)
         {
             if (product != null) 
-                _products.Add((Product)product.Clone());
+                if (_products.Contains(product)) 
+                    throw new InvalidOperationException("Product already exist.");
+                else
+                    _products.Add((Product)product.Clone());
         }
 
         /**
          * 
          * take product name and delete it from the list. 
-         * if the product does not exist do nothing.
+         * if the product does not exist throw 
+         * InvalidOperationException("Product not found.");
          */
         public void DeleteProduct(string name)
         {
-            int index = -1;
-            for (int i = 0; i < _products.Count; i++)
-            {
-                if (_products[i].Name == name)
-                {
-                    index = i;
-                    break; 
-                }
-            }
-            if (index != -1) _products.RemoveAt(index);
+            if (!_products.Remove(new Product() { Name = name, Price = 0.0 }))
+                throw new InvalidOperationException("Product not found.");
         }
 
         /**
          * 
          * Find the product with specified name in list. 
          * if it exist then replace it with a copy of passed product.
+         * if not throw InvalidOperationException()
          */
         public void EditProduct(string name, Product updated)
         {
-            int index = -1; 
-            for (int i = 0; i <  _products.Count; i++)
-            {
-                if (_products[i].Name.Equals(name))
-                {
-                    index = i;
-                    break; 
-                }
-            }
-            if (index != -1) 
+            int index = _products.IndexOf(new Product() { Name = name, Price = 0 });
+            if (index != -1)
                 _products[index] = (Product)updated.Clone();
+            else
+                throw new InvalidOperationException("Product not found.");
         }
 
         /**
@@ -77,11 +70,9 @@ namespace SimpleInventoryManagement.Services
          */
         public Product? FindProduct(string name)
         {
-            foreach (var p in  _products)
-            {
-                if (p.Name.Equals(name)) return p.Clone() as Product;
-            }
-            return null;
+            int index = _products.IndexOf(new Product() { Name = name, Price = 0 });
+            if (index == -1) return null; 
+            return _products[index].Clone() as Product;
         }
 
         /**
