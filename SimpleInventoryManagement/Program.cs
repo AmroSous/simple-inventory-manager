@@ -107,6 +107,10 @@ namespace SimpleInventoryManagement
                             this application used to track number of products in inventory using 
                             friendly console interface. 
 
+                            commands: 
+                                - (NEW) you can use --abort command to abort current process and return 
+                                  to the main menu. 
+
 
                 """, LogType.Success);
 
