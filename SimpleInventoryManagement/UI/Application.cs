@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SimpleInventoryManagement.Services;
+﻿using SimpleInventoryManagement.Services;
 using SimpleInventoryManagement.Models;
+using SimpleInventoryManagement.Util;
 
 namespace SimpleInventoryManagement.UI
 {
@@ -15,7 +11,7 @@ namespace SimpleInventoryManagement.UI
      * defines the interactive process with user to take inputs 
      * from console and print outputs.
      */
-    public class Application(IInventory inventory)
+    public sealed class Application(IInventory inventory)
     {
         /**
          * this object is an instance of IInventory interface 
@@ -27,12 +23,13 @@ namespace SimpleInventoryManagement.UI
         public void AddProduct()
         {
             // take product info from user
-            string productName = GetNonEmptyString("Enter product name:");
-            double productPrice = GetNonNegativeDouble("Enter product price:");
+            string productName = IO.ReadNotNull("Enter product name: ");
+            double productPrice = IO.ReadNonNegativeDouble("Enter product price: ", false) ?? -1;
 
             // add product to the list
             Product product = new() { Name = productName, Price = productPrice };
             _inventory.AddProduct(product);
+            IO.Log("Product added successfully.\n", LogType.Success);
         }
 
 
@@ -42,14 +39,14 @@ namespace SimpleInventoryManagement.UI
             var list = _inventory.GetAllProducts();
             if (list.Count == 0)
             {
-                Console.WriteLine("There is no products.");
+                IO.Log("There is no products.\n", LogType.Fail);
             }
             else 
             {
                 int count = 1;
                 foreach (var product in list)
                 {
-                    Console.WriteLine($"{count++}: {product}");
+                    IO.Log($"{count++}: {product}\n", LogType.Success);
                 }
             }
             Console.WriteLine();
@@ -58,125 +55,45 @@ namespace SimpleInventoryManagement.UI
 
         public void EditProduct()
         {
-            string name = GetNonEmptyString("Enter product name to update:");
+            string name = IO.ReadNotNull("Enter product name to update: ");
             var product = _inventory.FindProduct(name);
             if (product == null)
-            {
-                Console.WriteLine("Product not found.");
-                return;
-            }
+                throw new InvalidOperationException("Product not found.");
 
-            string? newName = GetNullableInput($"Enter new name: ({name})");
-            double? newPrice = GetNullableNonNegativeDouble($"Enter new price: ({product.Price})");
+            string newName = IO.Read($"Enter new name: ({name}) ") ?? name;
+            double newPrice = IO.ReadNonNegativeDouble($"Enter new price: ({product.Price}) ", true) ?? product.Price;
 
-            Product updated = new() { Name = newName ?? name, Price = newPrice ?? product.Price };
+            Product updated = new() { Name = newName, Price = newPrice };
             _inventory.EditProduct(name, updated);
 
-            Console.WriteLine("Updated successfully.");
+            IO.Log("Updated successfully.\n", LogType.Success);
         }
 
         public void DeleteProduct()
         {
-            string name = GetNonEmptyString("Enter product name:");
+            string name = IO.ReadNotNull("Enter product name: ");
             if (_inventory.FindProduct(name) == null)
+                throw new InvalidOperationException("Product not found.");
+
+            IO.Log("Are you sure you want to delete this product ? (y/n) ", LogType.Warning);
+            string input = IO.Read() ?? "n";
+            input = input.ToLower();
+            if (input.Equals("y"))
             {
-                Console.WriteLine("Product not found.");
+                _inventory.DeleteProduct(name);
+                IO.Log("Deleted successfully.\n", LogType.Success);
             }
             else
             {
-                Console.Write("Are you sure you want to delete this product ? (y/n) ");
-                string input = Console.ReadLine() ?? "y";
-                if (string.IsNullOrWhiteSpace(input))  input = "y";
-                input = input.ToLower();
-                if (input.Equals("y"))
-                {
-                    _inventory.DeleteProduct(name);
-                    Console.WriteLine("Deleted successfully.");
-                }
-                else
-                {
-                    Console.WriteLine("Operation aborted.");
-                }
+                throw new OperationAbortedException();
             }
         }
 
         public void FindProduct()
         {
-            string name = GetNonEmptyString("Enter name of product:");
+            string name = IO.ReadNotNull("Enter name of product: ");
             var product = _inventory.FindProduct(name);
-            if (product == null)
-            {
-                Console.WriteLine("Product not found.");
-            }
-            else
-            {
-                Console.WriteLine(product);
-            }
-        }
-
-        /**
-         * utility method that
-         * prompt the user to enter a string or null.
-         */
-        private static string? GetNullableInput(string msg)
-        {
-            Console.Write($"{msg} ");
-            string? input = Console.ReadLine();
-            return (string.IsNullOrWhiteSpace(input) ? null : input);
-        }
-
-        /**
-         * utility method to
-         * prompt the user to enter positive double 
-         * or null
-         */
-        private static double? GetNullableNonNegativeDouble(string msg)
-        {
-            Console.Write($"{msg} ");
-            string? input = Console.ReadLine();
-            double value = 0.0;
-            while (!string.IsNullOrWhiteSpace(input) && (!double.TryParse(input, out value) || value < 0)) 
-            {
-                Console.Write($"{msg} ");
-                input = Console.ReadLine();
-            }
-            if (string.IsNullOrWhiteSpace(input)) return null; 
-            return value;
-        }
-
-        /**
-         * this is a utility method to take a non empty string 
-         * from the user. 
-         * if user enter empty or white spaces it will prompt the user 
-         * again with a message to enter value.
-         */
-        private static string GetNonEmptyString(string msg)
-        {
-            string? input = null; 
-            while (string.IsNullOrWhiteSpace(input))
-            {
-                Console.Write($"{msg} ");
-                input = Console.ReadLine();
-            }
-            return input;
-        }
-
-        /**
-         * this is a utility method to take a non positive double 
-         * alue from the user.
-         * it prompt the user with a message and reads input. 
-         * if input is negative or null it will replay the process.
-         */
-        private static double GetNonNegativeDouble(string msg)
-        {
-            string? input = null;
-            double value;
-            while (!double.TryParse(input, out value) || value < 0.0)
-            {
-                Console.Write($"{msg} ");
-                input = Console.ReadLine();
-            }
-            return value;
+            IO.Log($"{product}\n", LogType.Success);
         }
     }
 }
