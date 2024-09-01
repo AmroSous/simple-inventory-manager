@@ -41,6 +41,9 @@ namespace SimpleInventoryManagement
                             app.ViewAllProducts(); break;
                         case 6:
                             break;
+                        case 7:
+                            Console.Clear();
+                            break;
                         default:
                             Console.WriteLine("Invalid operation."); break;
                     }
@@ -118,6 +121,7 @@ namespace SimpleInventoryManagement
                         ║    4- Find product.           ║
                         ║    5- View all products.      ║
                         ║    6- Exit.                   ║
+                        ║    7- Clear console.          ║
                         ║                               ║
                         ╚═══════════ ^^^^^^^ ═══════════╝
 
@@ -127,7 +131,7 @@ namespace SimpleInventoryManagement
             IO.Log("Enter the number of requested operation: ", LogType.Normal);
             string? input = Console.ReadLine();
             return int.TryParse(input, out int choice) 
-                && choice >= 1 && choice <= 6 ? choice : -1;
+                && choice >= 1 && choice <= 7 ? choice : -1;
         }
     }
 }
