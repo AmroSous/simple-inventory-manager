@@ -30,22 +30,33 @@ namespace SimpleInventoryManagement
                     switch (op)
                     {
                         case 1: 
-                            app.AddProduct(); break;
+                            app.AddProduct();
+                            PressToContinue();
+                            break;
                         case 2:
-                            app.EditProduct(); break;
+                            app.EditProduct();
+                            PressToContinue();
+                            break;
                         case 3:
-                            app.DeleteProduct(); break;
+                            app.DeleteProduct();
+                            PressToContinue();
+                            break;
                         case 4:
-                            app.FindProduct(); break;
+                            app.FindProduct();
+                            PressToContinue();
+                            break;
                         case 5:
-                            app.ViewAllProducts(); break;
+                            app.ViewAllProducts();
+                            PressToContinue();
+                            break;
                         case 6:
                             break;
                         case 7:
                             Console.Clear();
                             break;
                         default:
-                            Console.WriteLine("Invalid operation."); break;
+                            Console.WriteLine("Invalid operation."); 
+                            break;
                     }
                 }
                 catch (OperationAbortedException)
@@ -132,6 +143,12 @@ namespace SimpleInventoryManagement
             string? input = Console.ReadLine();
             return int.TryParse(input, out int choice) 
                 && choice >= 1 && choice <= 7 ? choice : -1;
+        }
+
+        private static void PressToContinue()
+        {
+            IO.Log("Press to continue.. ", LogType.Info);
+            Console.ReadLine();
         }
     }
 }
