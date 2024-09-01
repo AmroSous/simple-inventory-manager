@@ -39,7 +39,7 @@ namespace SimpleInventoryManagement.UI
             var list = _inventory.GetAllProducts();
             if (list.Count == 0)
             {
-                IO.Log("There is no products.\n", ConsoleColorType.Fail);
+                IO.Log("There is no products.\n", ConsoleColorType.Failure);
             }
             else 
             {

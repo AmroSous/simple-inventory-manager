@@ -65,7 +65,7 @@ namespace SimpleInventoryManagement
                 }
                 catch (InvalidOperationException ex)
                 {
-                    IO.Log($"{ex.Message}\n", ConsoleColorType.Fail);
+                    IO.Log($"{ex.Message}\n", ConsoleColorType.Failure);
                 }
                 catch (Exception ex)
                 {
@@ -114,7 +114,7 @@ namespace SimpleInventoryManagement
 
                 """, ConsoleColorType.Success);
 
-            IO.Log("Enter any key to start the application.. ", ConsoleColorType.Normal);
+            IO.Log("Enter any key to start the application.. ", ConsoleColorType.Default);
             Console.ReadLine();
         }
 
@@ -143,7 +143,7 @@ namespace SimpleInventoryManagement
 
                 """, ConsoleColorType.Warning);
 
-            IO.Log("Enter the number of requested operation: ", ConsoleColorType.Normal);
+            IO.Log("Enter the number of requested operation: ", ConsoleColorType.Default);
             string? input = Console.ReadLine();
             return int.TryParse(input, out int choice) 
                 && choice >= 1 && choice <= 7 ? choice : -1;
