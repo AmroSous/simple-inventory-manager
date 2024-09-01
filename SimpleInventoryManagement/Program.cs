@@ -61,15 +61,15 @@ namespace SimpleInventoryManagement
                 }
                 catch (OperationAbortedException)
                 {
-                    IO.Log("Operation aborted.\n", LogType.Info);
+                    IO.Log("Operation aborted.\n", ConsoleColorType.Information);
                 }
                 catch (InvalidOperationException ex)
                 {
-                    IO.Log($"{ex.Message}\n", LogType.Fail);
+                    IO.Log($"{ex.Message}\n", ConsoleColorType.Fail);
                 }
                 catch (Exception ex)
                 {
-                    IO.Log($"{ex.Message}\n", LogType.Error);
+                    IO.Log($"{ex.Message}\n", ConsoleColorType.Error);
                 }
 
             } while (op != 6);
@@ -78,7 +78,7 @@ namespace SimpleInventoryManagement
 
                         Good bye ..
 
-                """, LogType.Info);
+                """, ConsoleColorType.Information);
             Console.ReadLine();
         }
 
@@ -100,7 +100,7 @@ namespace SimpleInventoryManagement
 
 
 
-                """, LogType.Info);
+                """, ConsoleColorType.Information);
 
             IO.Log("""
                             Welcome to our first version of Simple Inventory Management System. 
@@ -112,9 +112,9 @@ namespace SimpleInventoryManagement
                                   to the main menu. 
 
 
-                """, LogType.Success);
+                """, ConsoleColorType.Success);
 
-            IO.Log("Enter any key to start the application.. ", LogType.Normal);
+            IO.Log("Enter any key to start the application.. ", ConsoleColorType.Normal);
             Console.ReadLine();
         }
 
@@ -141,9 +141,9 @@ namespace SimpleInventoryManagement
                         ╚═══════════ ^^^^^^^ ═══════════╝
 
 
-                """, LogType.Warning);
+                """, ConsoleColorType.Warning);
 
-            IO.Log("Enter the number of requested operation: ", LogType.Normal);
+            IO.Log("Enter the number of requested operation: ", ConsoleColorType.Normal);
             string? input = Console.ReadLine();
             return int.TryParse(input, out int choice) 
                 && choice >= 1 && choice <= 7 ? choice : -1;
@@ -151,7 +151,7 @@ namespace SimpleInventoryManagement
 
         private static void PressToContinue()
         {
-            IO.Log("Press to continue.. ", LogType.Info);
+            IO.Log("Press to continue.. ", ConsoleColorType.Information);
             Console.ReadLine();
         }
     }

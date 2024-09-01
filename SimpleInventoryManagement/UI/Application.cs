@@ -29,7 +29,7 @@ namespace SimpleInventoryManagement.UI
             // add product to the list
             Product product = new() { Name = productName, Price = productPrice };
             _inventory.AddProduct(product);
-            IO.Log("Product added successfully.\n", LogType.Success);
+            IO.Log("Product added successfully.\n", ConsoleColorType.Success);
         }
 
 
@@ -39,14 +39,14 @@ namespace SimpleInventoryManagement.UI
             var list = _inventory.GetAllProducts();
             if (list.Count == 0)
             {
-                IO.Log("There is no products.\n", LogType.Fail);
+                IO.Log("There is no products.\n", ConsoleColorType.Fail);
             }
             else 
             {
                 int count = 1;
                 foreach (var product in list)
                 {
-                    IO.Log($"{count++}: {product}\n", LogType.Success);
+                    IO.Log($"{count++}: {product}\n", ConsoleColorType.Success);
                 }
             }
             Console.WriteLine();
@@ -66,7 +66,7 @@ namespace SimpleInventoryManagement.UI
             Product updated = new() { Name = newName, Price = newPrice };
             _inventory.EditProduct(name, updated);
 
-            IO.Log("Updated successfully.\n", LogType.Success);
+            IO.Log("Updated successfully.\n", ConsoleColorType.Success);
         }
 
         public void DeleteProduct()
@@ -75,13 +75,13 @@ namespace SimpleInventoryManagement.UI
             if (_inventory.FindProduct(name) == null)
                 throw new InvalidOperationException("Product not found.");
 
-            IO.Log("Are you sure you want to delete this product ? (y/n) ", LogType.Warning);
+            IO.Log("Are you sure you want to delete this product ? (y/n) ", ConsoleColorType.Warning);
             string input = IO.Read() ?? "n";
             input = input.ToLower();
             if (input.Equals("y"))
             {
                 _inventory.DeleteProduct(name);
-                IO.Log("Deleted successfully.\n", LogType.Success);
+                IO.Log("Deleted successfully.\n", ConsoleColorType.Success);
             }
             else
             {
@@ -93,7 +93,7 @@ namespace SimpleInventoryManagement.UI
         {
             string name = IO.ReadNotNull("Enter name of product: ");
             var product = _inventory.FindProduct(name);
-            IO.Log($"{product}\n", LogType.Success);
+            IO.Log($"{product}\n", ConsoleColorType.Success);
         }
     }
 }

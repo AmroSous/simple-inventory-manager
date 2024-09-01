@@ -13,7 +13,7 @@ namespace SimpleInventoryManagement.Util
          * take a message string and log type, to specify color of log.
          * after printing, the console color reset.
          */
-        public static void Log(string message, LogType type)
+        public static void Log(string message, ConsoleColorType type)
         {
             Console.ForegroundColor = (ConsoleColor)type;
             Console.Write(message);
@@ -43,7 +43,7 @@ namespace SimpleInventoryManagement.Util
          */
         public static string? Read(string msg)
         {
-            Log(msg, LogType.Prompt);
+            Log(msg, ConsoleColorType.Prompt);
             return Read();
         }
 
@@ -57,7 +57,7 @@ namespace SimpleInventoryManagement.Util
             string? input;
             do
             {
-                Log(msg, LogType.Prompt);
+                Log(msg, ConsoleColorType.Prompt);
                 input = Read();
             } while (string.IsNullOrWhiteSpace(input));
             return input;
