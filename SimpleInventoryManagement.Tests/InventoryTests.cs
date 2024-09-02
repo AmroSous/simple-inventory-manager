@@ -8,7 +8,7 @@ namespace SimpleInventoryManagement.Tests
         [Fact]
         public void Add_Product_Test()
         {
-            Inventory inventory = new();
+            InventoryService inventory = new();
 
             var p1 = new Product() { Name = "product1", Price = 49.5 };
             var p2 = new Product() { Name = "product2", Price = 5.99 };
@@ -26,7 +26,7 @@ namespace SimpleInventoryManagement.Tests
         [Fact]
         public void Change_Added_Instance_Of_Product_Not_Affects_Database()
         {
-            Inventory inventory = new();
+            InventoryService inventory = new();
             var p1 = new Product() { Name = "product1", Price = 49.5 };
             inventory.AddProduct(p1);
 
@@ -36,7 +36,7 @@ namespace SimpleInventoryManagement.Tests
         [Fact]
         public void Check_Immutability_For_Returned_Products_List()
         {
-            Inventory inventory = new();
+            InventoryService inventory = new();
             var p1 = new Product() { Name = "product1", Price = 49.5 };
             inventory.AddProduct(p1);
 
@@ -52,13 +52,15 @@ namespace SimpleInventoryManagement.Tests
         [Fact]
         public void Edit_Product_Test()
         {
-            Inventory inventory = new();
+            InventoryService inventory = new();
             var p1 = new Product() { Name = "product1", Price = 49.5 };
             inventory.AddProduct(p1);
 
             Product updated = new() { Name = "product2", Price = 59.0 };
             inventory.EditProduct(p1.Name, updated);
-            var notExistProduct = inventory.FindProduct("product1");
+            Product? notExistProduct = null;
+            Assert.Throws<InvalidOperationException>(
+                () => notExistProduct = inventory.FindProduct("product1"));
             var existProduct = inventory.FindProduct("product2");
             Assert.Null(notExistProduct);
             Assert.NotNull(existProduct);
@@ -70,19 +72,20 @@ namespace SimpleInventoryManagement.Tests
         [Fact]
         public void Delete_Product_Test()
         {
-            Inventory inventory = new();
+            InventoryService inventory = new();
             var p1 = new Product() { Name = "product1", Price = 49.5 };
             inventory.AddProduct(p1);
 
             inventory.DeleteProduct(p1.Name);
-            Product? p11 = inventory.FindProduct(p1.Name);
+            Product? p11 = null;
+            Assert.Throws<InvalidOperationException>(() => p11 = inventory.FindProduct(p1.Name));
             Assert.Null(p11);
         }
 
         [Fact]
         public void Find_Product_Test()
         {
-            Inventory inventory = new();
+            InventoryService inventory = new();
             var p1 = new Product() { Name = "product1", Price = 49.5 };
             inventory.AddProduct(p1);
 
@@ -98,7 +101,7 @@ namespace SimpleInventoryManagement.Tests
          * and test if changes on this object
          * will not affect the database. 
          */
-        private static bool Check_Immutability(Product product, IInventory inventory)
+        private static bool Check_Immutability(Product product, IInventoryService inventory)
         {
             product.AddQuantity(4);
             var data = inventory.FindProduct(product.Name);

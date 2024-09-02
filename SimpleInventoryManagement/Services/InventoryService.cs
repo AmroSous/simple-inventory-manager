@@ -10,7 +10,7 @@ namespace SimpleInventoryManagement.Services
      * 
      * if the program terminated the changes made no longer exists.
      */
-    public class Inventory : IInventory
+    public class InventoryService : IInventoryService
     {
         /**
          * private List data structure to store products 
@@ -71,7 +71,7 @@ namespace SimpleInventoryManagement.Services
         public Product? FindProduct(string name)
         {
             int index = _products.IndexOf(new Product() { Name = name, Price = 0 });
-            if (index == -1) return null; 
+            if (index == -1) throw new InvalidOperationException("Product not found.");
             return _products[index].Clone() as Product;
         }
 

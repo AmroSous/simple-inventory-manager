@@ -6,12 +6,14 @@
      */
     public enum ConsoleColorType
     {
+        Default = ConsoleColor.White,
         Information = ConsoleColor.Blue,
-        Error = ConsoleColor.Red,
+        Error = ConsoleColor.DarkRed,
         Warning = ConsoleColor.DarkYellow,
         Prompt = ConsoleColor.Magenta,
         Success = ConsoleColor.DarkGreen,
         Failure = ConsoleColor.DarkGray,
-        Default = ConsoleColor.White
+        Important = ConsoleColor.Red,
+        Help = ConsoleColor.Cyan
     }
 }

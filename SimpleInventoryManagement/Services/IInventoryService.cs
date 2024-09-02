@@ -12,7 +12,7 @@ namespace SimpleInventoryManagement.Services
      * enhance the application in future by extending another implementation 
      * for this class.
      */
-    public interface IInventory
+    public interface IInventoryService
     {
         /**
          * Add product function must take a product instance 

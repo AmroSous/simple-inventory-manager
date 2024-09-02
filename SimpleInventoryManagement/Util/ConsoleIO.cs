@@ -6,7 +6,7 @@ namespace SimpleInventoryManagement.Util
      * operations, reading from user and logging (printing)
      * messages on console.
      */
-    public static class IO
+    public static class ConsoleIO
     {
         /**
          * used to print a message on console.
@@ -41,9 +41,10 @@ namespace SimpleInventoryManagement.Util
          * same as Read method but print message before 
          * reading input from user.
          */
-        public static string? Read(string msg)
+        public static string? Read(string msg, 
+            ConsoleColorType colorType = ConsoleColorType.Prompt)
         {
-            Log(msg, ConsoleColorType.Prompt);
+            Log(msg, colorType);
             return Read();
         }
 
