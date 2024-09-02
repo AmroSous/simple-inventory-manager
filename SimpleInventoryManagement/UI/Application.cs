@@ -61,7 +61,7 @@ namespace SimpleInventoryManagement.UI
         {
             var product = new Product
             {
-                Name = ConsoleIO.ReadNotNull("Enter product name: "),
+                Name = ConsoleIO.ReadNonEmpty("Enter product name: "),
                 Price = ConsoleIO.ReadNonNegativeDouble("Enter product price: ", false) ?? -1
             };
 
@@ -90,7 +90,7 @@ namespace SimpleInventoryManagement.UI
 
         private void EditProduct()
         {
-            string name = ConsoleIO.ReadNotNull("Enter product name to update: ");
+            string name = ConsoleIO.ReadNonEmpty("Enter product name to update: ");
             var product = _inventory.FindProduct(name) ?? throw new InvalidOperationException("Product not found.");
             
             var updated = new Product
@@ -105,7 +105,7 @@ namespace SimpleInventoryManagement.UI
 
         private void DeleteProduct()
         {
-            string name = ConsoleIO.ReadNotNull("Enter product name: ");
+            string name = ConsoleIO.ReadNonEmpty("Enter product name: ");
             if (_inventory.FindProduct(name) == null)
                 throw new InvalidOperationException("Product not found.");
 
@@ -123,7 +123,7 @@ namespace SimpleInventoryManagement.UI
 
         private void FindProduct()
         {
-            string name = ConsoleIO.ReadNotNull("Enter name of product: ");
+            string name = ConsoleIO.ReadNonEmpty("Enter name of product: ");
             var product = _inventory.FindProduct(name);
             ConsoleIO.Log($"{product}\n", ConsoleColorType.Success);
         }

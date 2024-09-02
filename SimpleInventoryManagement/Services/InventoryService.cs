@@ -70,9 +70,10 @@ namespace SimpleInventoryManagement.Services
          */
         public Product? FindProduct(string name)
         {
-            int index = _products.IndexOf(new Product() { Name = name, Price = 0 });
-            if (index == -1) throw new InvalidOperationException("Product not found.");
-            return _products[index].Clone() as Product;
+            var product = _products.FirstOrDefault(
+                p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            return product == null ? throw new InvalidOperationException("Product not found.") 
+                : product.Clone() as Product;
         }
 
         /**

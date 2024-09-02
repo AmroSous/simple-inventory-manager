@@ -28,11 +28,8 @@ namespace SimpleInventoryManagement.Util
          */
         public static string? Read()
         {
-            string? input;
-            input = Console.ReadLine();
-            if (input == null) return null;
-            input = input.Trim();
-            if (input.Equals("--abort"))
+            var input = Console.ReadLine()?.Trim();
+            if (input == "--abort")
                 throw new OperationAbortedException();
             return string.IsNullOrEmpty(input) ? null : input; 
         }
@@ -53,7 +50,7 @@ namespace SimpleInventoryManagement.Util
          * from user, if it empty or null try again.
          * it takes message to show before take input.
          */
-        public static string ReadNotNull(string msg)
+        public static string ReadNonEmpty(string msg)
         {
             string? input;
             do
@@ -80,7 +77,7 @@ namespace SimpleInventoryManagement.Util
             bool parsed;
             do
             {
-                input = canNull ? Read(msg) : ReadNotNull(msg);
+                input = canNull ? Read(msg) : ReadNonEmpty(msg);
                 parsed = double.TryParse(input, out value);
                 if (parsed && (value < left_bound || value > right_bound)) parsed = false;
 
