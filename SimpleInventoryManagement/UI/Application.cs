@@ -55,7 +55,6 @@ namespace SimpleInventoryManagement.UI
             }
 
             ShowGoodByeMessage();
-            PressToContinue();
         }
 
         private void AddProduct()
