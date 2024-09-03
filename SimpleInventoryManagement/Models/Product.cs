@@ -20,25 +20,15 @@ namespace SimpleInventoryManagement.Models
             => $"Product {{ Name: {Name}, Price: {Price}, Quantity: {Quantity} }}";
 
         public object Clone()
-        {
-            return new Product() { Name = Name, Price = Price };
-        }
+            => new Product() { Name = Name, Price = Price };
 
         public bool Equals(Product? other)
-        {
-            if (other == null) return false;
-            return Name.Equals(other.Name, StringComparison.OrdinalIgnoreCase);
-        }
+            => other != null && Name.Equals(other.Name, StringComparison.OrdinalIgnoreCase);
 
         public override bool Equals(object? obj)
-        {
-            if (obj == null || GetType() != obj.GetType()) return false;
-            return Equals(obj as Product);
-        }
+            => obj != null && GetType() == obj.GetType() && Equals(obj as Product);
 
         public override int GetHashCode()
-        {
-            return Name.ToLower().GetHashCode();
-        }
+            => Name.ToLower().GetHashCode();
     }
 }

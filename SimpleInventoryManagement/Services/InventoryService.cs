@@ -3,12 +3,10 @@
 namespace SimpleInventoryManagement.Services
 {
     /**
-     * This Inventory class is an implementation of IInventory interface 
+     * This Inventory class is an implementation of IInventoryService interface 
      * 
-     * this class uses a private data structure to store products in memory 
-     * temporarily and perform operations on them. 
-     * 
-     * if the program terminated the changes made no longer exists.
+     * this class uses a private data structure to store products in
+     * volotaile memory and perform operations on them. 
      */
     public class InventoryService : IInventoryService
     {
@@ -22,17 +20,16 @@ namespace SimpleInventoryManagement.Services
          * 
          * take a product param and store a copy of it 
          * in _products list. 
-         * if passed products was null nothing happen.
+         * if passed products was null or
          * if product already exist it throws
          * InvalidOperationException("Product already exist.");
          */
         public void AddProduct(Product product)
         {
-            if (product != null) 
-                if (_products.Contains(product)) 
-                    throw new InvalidOperationException("Product already exist.");
-                else
-                    _products.Add((Product)product.Clone());
+            if (product == null || _products.Contains(product)) 
+                throw new InvalidOperationException("Product already exist.");
+            else
+                _products.Add((Product)product.Clone());
         }
 
         /**
@@ -43,8 +40,9 @@ namespace SimpleInventoryManagement.Services
          */
         public void DeleteProduct(string name)
         {
-            if (!_products.Remove(new Product() { Name = name, Price = 0.0 }))
-                throw new InvalidOperationException("Product not found.");
+            var product = _products.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase)) 
+                ?? throw new InvalidOperationException("Product not found.");
+            _products.Remove(product);
         }
 
         /**
@@ -55,11 +53,9 @@ namespace SimpleInventoryManagement.Services
          */
         public void EditProduct(string name, Product updated)
         {
-            int index = _products.IndexOf(new Product() { Name = name, Price = 0 });
-            if (index != -1)
-                _products[index] = (Product)updated.Clone();
-            else
-                throw new InvalidOperationException("Product not found.");
+            int index = _products.FindIndex(p => p.Name.Equals(name,StringComparison.OrdinalIgnoreCase));
+            if (index == -1) throw new InvalidOperationException("Product not found.");
+            _products[index] = (Product)updated.Clone();
         }
 
         /**
@@ -68,12 +64,12 @@ namespace SimpleInventoryManagement.Services
          * by name, and return copy of this product.
          * if product does not exist return null
          */
-        public Product? FindProduct(string name)
+        public Product FindProduct(string name)
         {
             var product = _products.FirstOrDefault(
-                p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-            return product == null ? throw new InvalidOperationException("Product not found.") 
-                : product.Clone() as Product;
+                p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+                ?? throw new InvalidOperationException("Product not found.");
+            return (Product)product.Clone();
         }
 
         /**

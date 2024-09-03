@@ -9,11 +9,19 @@ namespace SimpleInventoryManagement.Util
     public static class ConsoleIO
     {
         /**
-         * used to print a message on console.
-         * take a message string and log type, to specify color of log.
+         * same as LogPrompt but with newline.
+         */
+        public static void Log(string message, ConsoleColorType type = ConsoleColorType.Default)
+        {
+            LogPrompt($"{message}\n", type);
+        }
+
+        /**
+         * used to print a message on console without newline.
+         * take a message string and Log color type,
          * after printing, the console color reset.
          */
-        public static void Log(string message, ConsoleColorType type)
+        public static void LogPrompt(string message, ConsoleColorType type = ConsoleColorType.Default)
         {
             Console.ForegroundColor = (ConsoleColor)type;
             Console.Write(message);
@@ -41,7 +49,7 @@ namespace SimpleInventoryManagement.Util
         public static string? Read(string msg, 
             ConsoleColorType colorType = ConsoleColorType.Prompt)
         {
-            Log(msg, colorType);
+            LogPrompt(msg, colorType);
             return Read();
         }
 
@@ -55,8 +63,7 @@ namespace SimpleInventoryManagement.Util
             string? input;
             do
             {
-                Log(msg, ConsoleColorType.Prompt);
-                input = Read();
+                input = Read(msg);
             } while (string.IsNullOrWhiteSpace(input));
             return input;
         }
@@ -69,21 +76,29 @@ namespace SimpleInventoryManagement.Util
          * it also checks that read value belongs to specified range. 
          * it returns read value.
          */
-        public static double? ReadDouble(string msg, bool canNull = false,
-            double left_bound = double.MinValue, double right_bound = double.MaxValue)
+        public static double? ReadDouble(string msg, bool canBeNull = false,
+            double leftBound = double.MinValue, double rightBound = double.MaxValue)
         {
-            string? input;
-            double value;
-            bool parsed;
+            double? value = null;
+            bool isValid = false;
             do
             {
-                input = canNull ? Read(msg) : ReadNonEmpty(msg);
-                parsed = double.TryParse(input, out value);
-                if (parsed && (value < left_bound || value > right_bound)) parsed = false;
+                var input = canBeNull ? Read(msg) : ReadNonEmpty(msg);
+                if (string.IsNullOrEmpty(input))
+                {
+                    if (canBeNull) return null;
+                    continue;
+                }
 
-            } while ((!canNull && !parsed) || (canNull && !string.IsNullOrEmpty(input) && !parsed));
+                isValid = double.TryParse(input, out double parsedValue)
+                          && parsedValue >= leftBound && parsedValue <= rightBound;
 
-            return string.IsNullOrEmpty(input) ? null : value;
+                if (isValid)
+                    value = parsedValue;
+
+            } while (!isValid);
+
+            return value;
         }
 
         /**

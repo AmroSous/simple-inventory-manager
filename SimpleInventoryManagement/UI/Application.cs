@@ -66,7 +66,7 @@ namespace SimpleInventoryManagement.UI
             };
 
             _inventory.AddProduct(product);
-            ConsoleIO.Log("Product added successfully.\n", ConsoleColorType.Success);
+            ConsoleIO.Log("Product added successfully.", ConsoleColorType.Success);
         }
 
 
@@ -75,14 +75,14 @@ namespace SimpleInventoryManagement.UI
             var list = _inventory.GetAllProducts();
             if (list.Count == 0)
             {
-                ConsoleIO.Log("There is no products.\n", ConsoleColorType.Failure);
+                ConsoleIO.Log("There is no products.", ConsoleColorType.Failure);
             }
             else 
             {
                 int count = 1;
                 foreach (var product in list)
                 {
-                    ConsoleIO.Log($"{count++}: {product}\n", ConsoleColorType.Success);
+                    ConsoleIO.Log($"{count++}: {product}", ConsoleColorType.Success);
                 }
             }
         }
@@ -100,7 +100,7 @@ namespace SimpleInventoryManagement.UI
             };
 
             _inventory.EditProduct(name, updated);
-            ConsoleIO.Log("Updated successfully.\n", ConsoleColorType.Success);
+            ConsoleIO.Log("Updated successfully.", ConsoleColorType.Success);
         }
 
         private void DeleteProduct()
@@ -113,7 +113,7 @@ namespace SimpleInventoryManagement.UI
             if (input.ToLower().Equals("y"))
             {
                 _inventory.DeleteProduct(name);
-                ConsoleIO.Log("Deleted successfully.\n", ConsoleColorType.Success);
+                ConsoleIO.Log("Deleted successfully.", ConsoleColorType.Success);
             }
             else
             {
@@ -125,7 +125,7 @@ namespace SimpleInventoryManagement.UI
         {
             string name = ConsoleIO.ReadNonEmpty("Enter name of product: ");
             var product = _inventory.FindProduct(name);
-            ConsoleIO.Log($"{product}\n", ConsoleColorType.Success);
+            if (product != null) ConsoleIO.Log(product.ToString(), ConsoleColorType.Success);
         }
 
         /**
@@ -168,24 +168,24 @@ namespace SimpleInventoryManagement.UI
                     return; // Exit
                 default:
                     ConsoleIO.Log("Invalid operation.", ConsoleColorType.Warning);
-                    break;
+                    return;
             }
             PressToContinue();
         }
 
         private static void HandleOperationAborted()
         {
-            ConsoleIO.Log("Operation aborted.\n", ConsoleColorType.Information);
+            ConsoleIO.Log("Operation aborted.", ConsoleColorType.Information);
         }
 
         private static void HandleInvalidOperation(InvalidOperationException ex)
         {
-            ConsoleIO.Log($"{ex.Message}\n", ConsoleColorType.Failure);
+            ConsoleIO.Log(ex.Message, ConsoleColorType.Failure);
         }
 
         private static void HandleGeneralException(Exception ex)
         {
-            ConsoleIO.Log($"{ex.Message}\n", ConsoleColorType.Error);
+            ConsoleIO.Log(ex.Message, ConsoleColorType.Error);
         }
     }
 }

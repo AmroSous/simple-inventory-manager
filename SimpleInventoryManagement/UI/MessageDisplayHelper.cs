@@ -20,14 +20,12 @@ namespace SimpleInventoryManagement.UI
                             ░░░╚═╝░░░╚═╝░░╚══════╝╚══════╝░╚════╝░░╚════╝░╚═╝░░░░░╚═╝╚══════╝
 
 
-
                 """, ConsoleColorType.Help);
 
             ConsoleIO.Log("""
                             Welcome to our Simple Inventory Management System. 
                             this application used to track number of products in inventory using 
                             friendly console interface. 
-
                 """, ConsoleColorType.Success);
         }
 
@@ -40,7 +38,6 @@ namespace SimpleInventoryManagement.UI
 
                                 - (NEW) you can use --abort command to abort current process 
                                         and return to the main menu.
-                                    
                 """, ConsoleColorType.Important);
         }
 
@@ -64,7 +61,6 @@ namespace SimpleInventoryManagement.UI
                         ║                               ║
                         ╚═══════════ ^^^^^^^ ═══════════╝
 
-
                 """, ConsoleColorType.Warning);
         }
 
@@ -76,7 +72,6 @@ namespace SimpleInventoryManagement.UI
             ConsoleIO.Log("""
 
                         Good bye ..
-
                 """, ConsoleColorType.Success);
         }
 
@@ -86,7 +81,7 @@ namespace SimpleInventoryManagement.UI
         public static void PressToContinue()
         {
             Console.WriteLine();
-            ConsoleIO.Log("Press to continue.. ", ConsoleColorType.Information);
+            ConsoleIO.LogPrompt("Press to continue.. ", ConsoleColorType.Information);
             Console.ReadLine();
         }
     }
